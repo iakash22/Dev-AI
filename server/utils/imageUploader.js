@@ -10,7 +10,7 @@ exports.uploadImageCloudinary = async (file, folder, height, quality) => {
         options.resource_type = "auto";
 
         const res = await cloudinary.uploader.upload(file.tempFilePath, options);
-        console.log(res);
+        // console.log(res);
         return res;
     }catch(err){
         return err.message;

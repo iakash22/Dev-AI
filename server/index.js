@@ -6,6 +6,8 @@ const dbConnect = require('./config/database');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const user = require('./routes/auth'); 
+const like = require('./routes/like'); 
+const video = require('./routes/videos'); 
 
 require('dotenv').config();
 
@@ -19,6 +21,8 @@ app.use(fileUpload({
     tempFileDir : '/tmp/'
 }));
 app.use('/user', user);
+app.use('/video', video);
+app.use('/like', like);
 app.use(cors());
 
 app.listen(PORT, () => {

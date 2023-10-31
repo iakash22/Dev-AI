@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const videos = new mongoose.Schema({
+const videoSchema = new mongoose.Schema({
     url : {
         type : String,
         required : true,
@@ -9,16 +9,15 @@ const videos = new mongoose.Schema({
         type : String,
         required : true,
     },
-    category : [
-        {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : 'Category'
-        }
-    ],
-    userId : [{     
+    category : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Category'
+    },
+    user : {     
         type : mongoose.Schema.Types.ObjectId,
         ref : "User",
-    }],
+        required : true,
+    },
     tag : {
         type : [String],
         required : true,
@@ -31,4 +30,4 @@ const videos = new mongoose.Schema({
     ],
 })
 
-module.exports = mongoose.model('Videos',)
+module.exports = mongoose.model('Videos', videoSchema)

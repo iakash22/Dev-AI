@@ -1,21 +1,24 @@
 const jwt = require('jsonwebtoken');
 
-exports.auth = async (req, res) => {
-    try {
-        const { token } = req.body
-            || req.cookies
-            || req.header("Authorisation").replace("Bearer ", "");
+require('dotenv').config();
 
-        if (!token) {
-            return res.status(400).json({
-                success: false,
-                message: "Token is missing",
-            });
-        }
-        try {
-            const decode = jwt.verify(token, process.env.SECRET_KEY);
-            console.log(decode);
-            req.user = decode;
+exports.auth = async (req, res,next) => {
+    try {
+        const token = req.cookies.token
+            || req.body.token
+            || req.header("Authorisation").replace("Bearer ", "");
+            
+            if (!token) {
+                return res.status(401).json({
+                    success: true,
+                    message: "Token is missing",
+                })
+            }
+            
+            try {
+                const decode = jwt.verify(token, process.env.SECRET_KEY);
+                console.log(decode);
+                req.user = decode;
 
         } catch (err) {
             // verification issues 
@@ -26,15 +29,15 @@ exports.auth = async (req, res) => {
         }
         next();
     } catch (err) {
-        console.log("Error occured while token check", err);
-        return res.status(401).json({
+        console.log("error occurred while auth middleware", err);
+        return res.status(404).json({
             success: false,
-            message: "user is not access",
-        })
+            message: "Something went wrong while validating the token",
+        });
     }
 }
 
-exports.register = async (req, res) => {
+exports.register = async (req, res,next) => {
     try {
         const { accountType } = req.user;
         if (accountType != "Register") {
